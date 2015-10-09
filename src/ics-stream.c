@@ -2,9 +2,19 @@
 #include <stdio.h>
 #include "ics-stream.h"
 
-void ics_stream_init(ics_stream_t *stream_data, pj_caching_pool *cp, pj_pool_t *pool) {
-    stream_data->cp = cp;
-    stream_data->pool = pool;
+void ics_stream_init(ics_stream_t *stream_data, pj_caching_pool *cp, pj_pool_t *pool) { 
+    if (cp != NULL) {
+        stream_data->cp = cp;
+        if (pool != NULL)
+            stream_data->pool = pool;
+        else
+            stream_data->pool = pj_pool_create(&stream_data->cp->factory, "pool", 4000, 4000, NULL);
+    }
+    else {
+        stream_data->cp = (pj_caching_pool *)malloc(sizeof(pj_caching_pool));
+        pj_caching_pool_init(stream_data->cp, NULL, 1024);
+        stream_data->pool = pj_pool_create(&stream_data->cp->factory, "pool", 4000, 4000, NULL);
+    }
 }
 void ics_stream_create(ics_stream_t *stream_data, int _local_port, char *_remote_addr, char *endpoint) {
     pj_status_t status;

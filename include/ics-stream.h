@@ -25,5 +25,6 @@ void ics_stream_connect_with_file_source(ics_stream_t *stream_data);
 void ics_stream_connect_with_snd_sink(ics_stream_t *stream_data);
 
 void ics_stream_start(ics_stream_t *stream_data);
+
 void ics_stream_clean(ics_stream_t *stream_data);
 #endif
